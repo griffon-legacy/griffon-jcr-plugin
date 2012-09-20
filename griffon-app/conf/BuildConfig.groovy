@@ -8,10 +8,10 @@ griffon.project.dependency.resolution = {
         mavenRepo 'https://repository.jboss.org/nexus/content/groups/public-jboss'
     }
     dependencies {
-        def jcrVersion = '2.4.1'
+        def jcrVersion = '2.5.1'
         compile "org.apache.jackrabbit:jackrabbit-core:$jcrVersion"
         compile 'javax.jcr:jcr:2.0'
-        compile('commons-pool:commons-pool:1.5.6') {
+        compile('commons-pool:commons-pool:1.6') {
             transitive = false
         }
     }

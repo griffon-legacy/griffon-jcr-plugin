@@ -37,7 +37,7 @@ class JcrGriffonAddon {
         }
     }
 
-    def events = [
+    Map events = [
         ShutdownStart: { app ->
             ConfigObject config = JcrConnector.instance.createConfig(app)
             JcrConnector.instance.disconnect(app, config)

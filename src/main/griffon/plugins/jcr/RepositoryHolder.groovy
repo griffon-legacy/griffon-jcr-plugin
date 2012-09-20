@@ -34,7 +34,7 @@ class RepositoryHolder implements JcrProvider {
     private static final Logger LOG = LoggerFactory.getLogger(RepositoryHolder)
     private static final Object[] LOCK = new Object[0]
     private final Map<String, Map<String, Object>> repositories = [:]
-  
+
     String[] getRepositoryNames() {
         List<String> repositoryNames = new ArrayList().addAll(repositories.keySet())
         repositoryNames.toArray(new String[repositoryNames.size()])
@@ -47,7 +47,7 @@ class RepositoryHolder implements JcrProvider {
 
     void setRepository(String repositoryName = 'default', Map<String, Object> repository) {
         if(isBlank(repositoryName)) repositoryName = 'default'
-        storeRepository(repositoryName, repository)       
+        storeRepository(repositoryName, repository)
     }
 
     Object withJcr(String repositoryName = 'default', Closure closure) {
@@ -77,10 +77,10 @@ class RepositoryHolder implements JcrProvider {
         if(isBlank(repositoryName)) repositoryName = 'default'
         retrieveRepository(repositoryName) != null
     }
-    
+
     void disconnectRepository(String repositoryName) {
         if(isBlank(repositoryName)) repositoryName = 'default'
-        storeRepository(repositoryName, null)        
+        storeRepository(repositoryName, null)
     }
 
     private Session openSession(Map<String, Object> config) {
@@ -104,7 +104,7 @@ class RepositoryHolder implements JcrProvider {
             ConfigObject config = JcrConnector.instance.createConfig(app)
             r = JcrConnector.instance.connect(app, config, repositoryName)
         }
-        
+
         if(r == null) {
             throw new IllegalArgumentException("No such Repository configuration for name $repositoryName")
         }

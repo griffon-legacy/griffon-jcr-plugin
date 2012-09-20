@@ -19,9 +19,9 @@
  */
  class JcrGriffonPlugin {
     // the plugin version
-    String version = '0.1'
+    String version = '0.2'
     // the version or versions of Griffon the plugin is designed for
-    String griffonVersion = '0.9.5 > *'
+    String griffonVersion = '1.1.0 > *'
     // the other plugins this plugin depends on
     Map dependsOn = [:]
     // resources that are included in plugin packaging
@@ -74,7 +74,7 @@ been configured as 'internal'
             withJcr('internal') { repositoryName, session -> ... }
         }
     }
-    
+
 This method is also accessible to any component through the singleton `griffon.plugins.jcr.JcrConnector`.
 You can inject these methods to non-artifacts via metaclasses. Simply grab hold of a particular metaclass and call
 `JcrEnhancer.enhance(metaClassInstance, jcrProviderInstance)`.
@@ -137,7 +137,7 @@ Inspired by [Jackrabbit's First Hops][3] here's how you can write a controller t
                     session.save()
                 }
             }
-    
+
             def queryAndDelete = {
                 withJcr { repositoryName, session ->
                     Node root = session.getRootNode()
@@ -168,9 +168,9 @@ fails regardless of the arguments it receives
 
     class MyJcrProvider implements JcrProvider {
         Object withJcr(String repositoryName = 'default', Closure closure) { null }
-        public <T> T withJcr(String repositoryName = 'default', CallableWithArgs<T> callable) { null }      
+        public <T> T withJcr(String repositoryName = 'default', CallableWithArgs<T> callable) { null }
     }
-    
+
 This implementation may be used in the following way
 
     class MyServiceTests extends GriffonUnitTestCase {

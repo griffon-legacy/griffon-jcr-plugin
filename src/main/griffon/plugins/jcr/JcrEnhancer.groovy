@@ -23,7 +23,7 @@ import griffon.util.CallableWithArgs
  */
 final class JcrEnhancer {
     private JcrEnhancer() {}
-    
+
     static void enhance(MetaClass mc, JcrProvider provider = RepositoryHolder.instance) {
         mc.withJcr = {Closure closure ->
             provider.withJcr('default', closure)

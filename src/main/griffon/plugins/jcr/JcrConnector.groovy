@@ -22,6 +22,7 @@ import griffon.core.GriffonApplication
 import griffon.util.Environment
 import griffon.util.Metadata
 import griffon.util.CallableWithArgs
+import griffon.util.ConfigUtils
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -44,8 +45,7 @@ final class JcrConnector implements JcrProvider {
     // ======================================================
 
     ConfigObject createConfig(GriffonApplication app) {
-        def configClass = app.class.classLoader.loadClass('JcrConfig')
-        return new ConfigSlurper(Environment.current.name).parse(configClass)
+        ConfigUtils.loadConfigWithI18n('JcrConfig')
     }
 
     private ConfigObject narrowConfig(ConfigObject config, String repositoryName) {
