@@ -80,7 +80,7 @@ The following list enumerates all the variants of the injected method
 
  * `<R> R withJcr(Closure<R> stmts)`
  * `<R> R withJcr(CallableWithArgs<R> stmts)`
- * `<R> R withJcr(String sesionName, Closure<R> stmts)`
+ * `<R> R withJcr(String sessionName, Closure<R> stmts)`
  * `<R> R withJcr(String sessionName, CallableWithArgs<R> stmts)`
 
 These methods are also accessible to any component through the singleton
@@ -105,7 +105,7 @@ change this setting by adding a configuration flag in `griffon-app/conf/Config.g
 
     griffon.jcr.injectInto = ['controller', 'service']
 
-Dynamic method injection wil skipped for classes implementing
+Dynamic method injection will be skipped for classes implementing
 `griffon.plugins.jcr.JcrContributionHandler`.
 
 ### Events
@@ -294,7 +294,7 @@ inside the `griffon-jcr-compile-x.y.z.jar`, with locations
 ### Lombok Support
 
 Rewriting Java AST in a similar fashion to Groovy AST transformations is
-posisble thanks to the [lombok][4] plugin.
+possible thanks to the [lombok][4] plugin.
 
 #### JavaC
 
