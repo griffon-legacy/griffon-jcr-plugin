@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 the original author or authors.
+ * Copyright 2012-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,61 +29,48 @@ import javax.jcr.*
 /**
  * @author Andres Almiray
  */
-@Singleton
-class RepositoryHolder implements JcrProvider {
+class RepositoryHolder {
+    private static final String DEFAULT = 'default'
     private static final Logger LOG = LoggerFactory.getLogger(RepositoryHolder)
     private static final Object[] LOCK = new Object[0]
     private final Map<String, Map<String, Object>> repositories = [:]
+
+    private static final RepositoryHolder INSTANCE
+
+    static {
+        INSTANCE = new RepositoryHolder()
+    }
+
+    static RepositoryHolder getInstance() {
+        INSTANCE
+    }
 
     String[] getRepositoryNames() {
         List<String> repositoryNames = new ArrayList().addAll(repositories.keySet())
         repositoryNames.toArray(new String[repositoryNames.size()])
     }
 
-    Map<String, Object> getRepository(String repositoryName = 'default') {
-        if(isBlank(repositoryName)) repositoryName = 'default'
+    Map<String, Object> getRepositoryConfiguration(String repositoryName = DEFAULT) {
+        if(isBlank(repositoryName)) repositoryName = DEFAULT
         retrieveRepository(repositoryName)
     }
 
-    void setRepository(String repositoryName = 'default', Map<String, Object> repository) {
-        if(isBlank(repositoryName)) repositoryName = 'default'
+    void setRepository(String repositoryName = DEFAULT, Map<String, Object> repository) {
+        if(isBlank(repositoryName)) repositoryName = DEFAULT
         storeRepository(repositoryName, repository)
-    }
-
-    Object withJcr(String repositoryName = 'default', Closure closure) {
-        Map<String, Object> r = fetchRepository(repositoryName)
-        if(LOG.debugEnabled) LOG.debug("Executing statement on repository '$repositoryName'")
-        Session session = openSession(r)
-        try {
-            return closure(repositoryName, session)
-        } finally {
-            session.logout()
-        }
-    }
-
-    public <T> T withJcr(String repositoryName = 'default', CallableWithArgs<T> callable) {
-        Map<String, Object> r = fetchRepository(repositoryName)
-        if(LOG.debugEnabled) LOG.debug("Executing statement on repository '$repositoryName'")
-        Session session = openSession(r)
-        try {
-            callable.args = [repositoryName, session] as Object[]
-            return callable.call()
-        } finally {
-            session.logout()
-        }
     }
     
     boolean isRepositoryConnected(String repositoryName) {
-        if(isBlank(repositoryName)) repositoryName = 'default'
+        if(isBlank(repositoryName)) repositoryName = DEFAULT
         retrieveRepository(repositoryName) != null
     }
 
     void disconnectRepository(String repositoryName) {
-        if(isBlank(repositoryName)) repositoryName = 'default'
+        if(isBlank(repositoryName)) repositoryName = DEFAULT
         storeRepository(repositoryName, null)
     }
 
-    private Session openSession(Map<String, Object> config) {
+    Session openSession(Map<String, Object> config) {
         if (config.credentials) { 
             if (config.workspace) {
                 return config.repository.login(config.credentials, config.workspace)
@@ -97,7 +84,7 @@ class RepositoryHolder implements JcrProvider {
     }
 
     private Map<String, Object> fetchRepository(String repositoryName) {
-        if(isBlank(repositoryName)) repositoryName = 'default'
+        if(isBlank(repositoryName)) repositoryName = DEFAULT
         Map<String, Object> r = retrieveRepository(repositoryName)
         if(r == null) {
             GriffonApplication app = ApplicationHolder.application

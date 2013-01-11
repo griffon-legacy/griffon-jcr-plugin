@@ -22,7 +22,11 @@ import groovy.lang.Closure;
 /**
  * @author Andres Almiray
  */
-public interface JcrProvider {
+public interface JcrContributionHandler {
+    void setJcrProvider(JcrProvider provider);
+
+    JcrProvider getJcrProvider();
+
     <R> R withJcr(Closure<R> closure);
 
     <R> R withJcr(String repositoryName, Closure<R> closure);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 the original author or authors.
+ * Copyright 2012-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ import griffon.core.GriffonClass
 import griffon.core.GriffonApplication
 import griffon.plugins.jcr.JcrConnector
 import griffon.plugins.jcr.JcrEnhancer
+import griffon.plugins.jcr.JcrContributionHandler
 
 /**
  * @author Andres Almiray
@@ -32,6 +33,7 @@ class JcrGriffonAddon {
         def types = app.config.griffon?.jcr?.injectInto ?: ['controller']
         for(String type : types) {
             for(GriffonClass gc : app.artifactManager.getClassesOfType(type)) {
+                if (JcrContributionHandler.isAssignableFrom(gc.clazz)) continue
                 JcrEnhancer.enhance(gc.metaClass)
             }
         }

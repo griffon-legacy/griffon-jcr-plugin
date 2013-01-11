@@ -1,2 +1,6 @@
 target
 release_notes.md
+.idea
+jcr-griffonPluginFixes.iml
+jcr-griffonPlugins.iml
+jcr.iml

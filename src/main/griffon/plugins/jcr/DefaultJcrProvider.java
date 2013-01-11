@@ -16,18 +16,26 @@
 
 package griffon.plugins.jcr;
 
-import griffon.util.CallableWithArgs;
-import groovy.lang.Closure;
+import javax.jcr.Session;
+import java.util.Map;
 
 /**
  * @author Andres Almiray
  */
-public interface JcrProvider {
-    <R> R withJcr(Closure<R> closure);
+public class DefaultJcrProvider extends AbstractJcrProvider {
+    private static final DefaultJcrProvider INSTANCE;
 
-    <R> R withJcr(String repositoryName, Closure<R> closure);
+    static {
+        INSTANCE = new DefaultJcrProvider();
+    }
 
-    <R> R withJcr(CallableWithArgs<R> callable);
+    public static DefaultJcrProvider getInstance() {
+        return INSTANCE;
+    }
 
-    <R> R withJcr(String repositoryName, CallableWithArgs<R> callable);
+    @Override
+    protected Session getSession(String repositoryName) {
+        final Map<String, Object> config = RepositoryHolder.getInstance().getRepositoryConfiguration(repositoryName);
+        return RepositoryHolder.getInstance().openSession(config);
+    }
 }
