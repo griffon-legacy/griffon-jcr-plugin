@@ -81,7 +81,7 @@ The following list enumerates all the variants of the injected method
  * `<R> R withJcr(Closure<R> stmts)`
  * `<R> R withJcr(CallableWithArgs<R> stmts)`
  * `<R> R withJcr(String sesionName, Closure<R> stmts)`
- * `<R> R withJcr(String SessionNameCallableWithArgs<R> stmts)`
+ * `<R> R withJcr(String sessionName, CallableWithArgs<R> stmts)`
 
 These methods are also accessible to any component through the singleton
 `griffon.plugins.jcr.JcrEnhancer`. You can inject these methods to
