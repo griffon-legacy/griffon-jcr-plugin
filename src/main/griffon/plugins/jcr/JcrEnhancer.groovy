@@ -30,7 +30,7 @@ final class JcrEnhancer {
     private JcrEnhancer() {}
     
     static void enhance(MetaClass mc, JcrProvider provider = DefaultJcrProvider.instance) {
-        if(LOG.debugEnabled) LOG.debug("Enhancing $mc with $provider")
+        if (LOG.debugEnabled) LOG.debug("Enhancing $mc with $provider")
         mc.withJcr = {Closure closure ->
             provider.withJcr(DEFAULT, closure)
         }

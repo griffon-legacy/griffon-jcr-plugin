@@ -51,22 +51,22 @@ class RepositoryHolder {
     }
 
     Map<String, Object> getRepositoryConfiguration(String repositoryName = DEFAULT) {
-        if(isBlank(repositoryName)) repositoryName = DEFAULT
+        if (isBlank(repositoryName)) repositoryName = DEFAULT
         retrieveRepository(repositoryName)
     }
 
     void setRepository(String repositoryName = DEFAULT, Map<String, Object> repository) {
-        if(isBlank(repositoryName)) repositoryName = DEFAULT
+        if (isBlank(repositoryName)) repositoryName = DEFAULT
         storeRepository(repositoryName, repository)
     }
     
     boolean isRepositoryConnected(String repositoryName) {
-        if(isBlank(repositoryName)) repositoryName = DEFAULT
+        if (isBlank(repositoryName)) repositoryName = DEFAULT
         retrieveRepository(repositoryName) != null
     }
 
     void disconnectRepository(String repositoryName) {
-        if(isBlank(repositoryName)) repositoryName = DEFAULT
+        if (isBlank(repositoryName)) repositoryName = DEFAULT
         storeRepository(repositoryName, null)
     }
 
@@ -77,22 +77,22 @@ class RepositoryHolder {
             } else {
                 return config.repository.login(config.credentials)
             }
-        } else if(config.workspace) {
+        } else if (config.workspace) {
             return config.repository.login(config.workspace)
         }
         config.repository.login()
     }
 
     private Map<String, Object> fetchRepository(String repositoryName) {
-        if(isBlank(repositoryName)) repositoryName = DEFAULT
+        if (isBlank(repositoryName)) repositoryName = DEFAULT
         Map<String, Object> r = retrieveRepository(repositoryName)
-        if(r == null) {
+        if (r == null) {
             GriffonApplication app = ApplicationHolder.application
             ConfigObject config = JcrConnector.instance.createConfig(app)
             r = JcrConnector.instance.connect(app, config, repositoryName)
         }
 
-        if(r == null) {
+        if (r == null) {
             throw new IllegalArgumentException("No such Repository configuration for name $repositoryName")
         }
         r

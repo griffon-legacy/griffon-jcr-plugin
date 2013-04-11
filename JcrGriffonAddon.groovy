@@ -20,16 +20,17 @@ import griffon.plugins.jcr.JcrConnector
 import griffon.plugins.jcr.JcrEnhancer
 import griffon.plugins.jcr.JcrContributionHandler
 
+import static griffon.util.ConfigUtils.getConfigValueAsBoolean
+
 /**
  * @author Andres Almiray
  */
 class JcrGriffonAddon {
-    void addonInit(GriffonApplication app) {
-        ConfigObject config = JcrConnector.instance.createConfig(app)
-        JcrConnector.instance.connect(app, config)
-    }
-
     void addonPostInit(GriffonApplication app) {
+        ConfigObject config = JcrConnector.instance.createConfig(app)
+        if (getConfigValueAsBoolean(app.config, 'griffon.jcr.connect.onstartup', true)) {
+            JcrConnector.instance.connect(app, config)
+        }
         def types = app.config.griffon?.jcr?.injectInto ?: ['controller']
         for(String type : types) {
             for(GriffonClass gc : app.artifactManager.getClassesOfType(type)) {

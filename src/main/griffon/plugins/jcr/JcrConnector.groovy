@@ -35,11 +35,19 @@ final class JcrConnector {
     private static final Logger LOG = LoggerFactory.getLogger(JcrConnector)
 
     ConfigObject createConfig(GriffonApplication app) {
-        ConfigUtils.loadConfigWithI18n('JcrConfig')
+        if (!app.config.pluginConfig.jcr) {
+            app.config.pluginConfig.jcr = ConfigUtils.loadConfigWithI18n('JcrConfig')
+        }
+        app.config.pluginConfig.jcr
     }
 
     private ConfigObject narrowConfig(ConfigObject config, String repositoryName) {
-        return repositoryName == DEFAULT ? config.repository : config.repositories[repositoryName]
+        if (config.containsKey('repository') && repositoryName == DEFAULT) {
+            return config.repository
+        } else if (config.containsKey('repositories')) {
+            return config.repositories[repositoryName]
+        }
+        return config
     }
 
     Map<String, Object> connect(GriffonApplication app, ConfigObject config, String repositoryName = DEFAULT) {

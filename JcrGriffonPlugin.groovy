@@ -19,7 +19,7 @@
  */
  class JcrGriffonPlugin {
     // the plugin version
-    String version = '1.0.0'
+    String version = '1.1.0'
     // the version or versions of Griffon the plugin is designed for
     String griffonVersion = '1.2.0 > *'
     // the other plugins this plugin depends on
@@ -142,6 +142,22 @@ default repository block is used.
 
 Until further notice only local repositories (those that require a `repository.xml`
 file and a home directoy) can be configured by this plugin.
+
+### Configuration Storage
+
+The plugin will load and store the contents of `JcrConfig.groovy` inside the
+application's configuration, under the `pluginConfig` namespace. You may retrieve
+and/or update values using
+
+    app.config.pluginConfig.jcr
+
+### Connect at Startup
+
+The plugin will attempt a connection to the default database at startup. If this
+behavior is not desired then specify the following configuration flag in
+`Config.groovy`
+
+    griffon.jcr.connect.onstartup = false
 
 ### Example
 
