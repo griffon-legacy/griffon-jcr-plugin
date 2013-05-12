@@ -45,6 +45,8 @@ class RepositoryHolder {
         INSTANCE
     }
 
+    private RepositoryHolder() {}
+
     String[] getRepositoryNames() {
         List<String> repositoryNames = new ArrayList().addAll(repositories.keySet())
         repositoryNames.toArray(new String[repositoryNames.size()])

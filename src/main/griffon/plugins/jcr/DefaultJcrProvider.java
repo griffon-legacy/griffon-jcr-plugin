@@ -33,6 +33,8 @@ public class DefaultJcrProvider extends AbstractJcrProvider {
         return INSTANCE;
     }
 
+    private DefaultJcrProvider() {}
+
     @Override
     protected Session getSession(String repositoryName) {
         final Map<String, Object> config = RepositoryHolder.getInstance().getRepositoryConfiguration(repositoryName);

@@ -19,11 +19,11 @@
  */
  class JcrGriffonPlugin {
     // the plugin version
-    String version = '1.1.0'
+    String version = '1.2.0'
     // the version or versions of Griffon the plugin is designed for
-    String griffonVersion = '1.2.0 > *'
+    String griffonVersion = '1.3.0 > *'
     // the other plugins this plugin depends on
-    Map dependsOn = [lombok: '0.4']
+    Map dependsOn = [lombok: '0.5.0']
     // resources that are included in plugin packaging
     List pluginIncludes = []
     // the plugin license
@@ -164,79 +164,79 @@ behavior is not desired then specify the following configuration flag in
 Inspired by [Jackrabbit's First Hops][3] here's how you can write a controller
 that creates, queries and deletes some content
 
-        package sample
-        import javax.jcr.*
-        @griffon.plugins.jcr.JcrAware
-        class SampleController {
-            def insert = {
-                withJcr { repositoryName, session ->
-                    Node root = session.rootNode
-                    Node hello = root.addNode("hello")
-                    Node world = hello.addNode("world")
-                    world.setProperty("message", "Hello, World!")
-                    session.save()
-                }
-            }
-
-            def queryAndDelete = {
-                withJcr { repositoryName, session ->
-                    Node root = session.rootNode
-                    Node node = root.getNode("hello/world")
-                    println(node.path)
-                    println(node.getProperty("message").getString())
-                    root.getNode("hello").remove()
-                    session.save()
-                }
+    package sample
+    import javax.jcr.*
+    @griffon.plugins.jcr.JcrAware
+    class SampleController {
+        def insert = {
+            withJcr { repositoryName, session ->
+                Node root = session.rootNode
+                Node hello = root.addNode("hello")
+                Node world = hello.addNode("world")
+                world.setProperty("message", "Hello, World!")
+                session.save()
             }
         }
+
+        def queryAndDelete = {
+            withJcr { repositoryName, session ->
+                Node root = session.rootNode
+                Node node = root.getNode("hello/world")
+                println(node.path)
+                println(node.getProperty("message").getString())
+                root.getNode("hello").remove()
+                session.save()
+            }
+        }
+    }
 
 The plugin exposes a Java friendly API to make the exact same calls from Java,
 or any other JVM language for that matter. Here's for example the previous code
 rewritten in Java. Note the usage of @JcrWare on a Java class
 
-        package sample;
-        import griffon.core.GriffonApplication;
-        import griffon.util.CallableWithArgs;
-        import java.awt.event.ActionEvent;
-        import javax.jcr.*;
-        import org.codehaus.griffon.runtime.core.AbstractGriffonController;
-        @griffon.plugins.jcr.JcrAware
-        public class SampleController extends AbstractGriffonController {
-            private SampleModel model;
-        
-            public void setModel(SampleModel model) {
-                this.model = model;
-            }
-        
-            public void insert(ActionEvent event) {
-                withJcr(new CallableWithArgs<Void>() {
-                    public Void call(Object[] args) {
-                        Session session = (Session) args[1];
-                        Node root = session.getRootNode();
-                        Node hello = root.addNode("hello");
-                        Node world = hello.addNode("world");
-                        world.setProperty("message", "Hello, World!");
-                        session.save();
-                        return null;
-                    }
-                });
-            }
-            
-            public void queryAndDelete(ActionEvent event) {
-                withJcr(new CallableWithArgs<Void>() {
-                    public Void call(Object[] args) {
-                        Session session = (Session) args[1];
-                        Node root = session.getRootNode();
-                        Node node = root.getNode("hello/world");
-                        System.out.println(node.getPath());
-                        System.out.println(node.getProperty("message").getString());
-                        root.getNode("hello").remove();
-                        session.save();
-                        return null;
-                    }
-                });
-            }
+    package sample;
+    import griffon.core.GriffonApplication;
+    import griffon.util.CallableWithArgs;
+    import java.awt.event.ActionEvent;
+    import javax.jcr.*;
+    import org.codehaus.griffon.runtime.core.AbstractGriffonController;
+    @griffon.plugins.jcr.JcrAware
+    public class SampleController extends AbstractGriffonController {
+        private SampleModel model;
+
+        public void setModel(SampleModel model) {
+            this.model = model;
         }
+
+        public void insert(ActionEvent event) {
+            withJcr(new CallableWithArgs<Void>() {
+                public Void call(Object[] args) {
+                    Session session = (Session) args[1];
+                    Node root = session.getRootNode();
+                    Node hello = root.addNode("hello");
+                    Node world = hello.addNode("world");
+                    world.setProperty("message", "Hello, World!");
+                    session.save();
+                    return null;
+                }
+            });
+        }
+        
+        public void queryAndDelete(ActionEvent event) {
+            withJcr(new CallableWithArgs<Void>() {
+                public Void call(Object[] args) {
+                    Session session = (Session) args[1];
+                    Node root = session.getRootNode();
+                    Node node = root.getNode("hello/world");
+                    System.out.println(node.getPath());
+                    System.out.println(node.getProperty("message").getString());
+                    root.getNode("hello").remove();
+                    session.save();
+                    return null;
+                }
+            });
+        }
+    }
 
 Testing
 -------

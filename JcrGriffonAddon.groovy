@@ -27,13 +27,10 @@ import static griffon.util.ConfigUtils.getConfigValueAsBoolean
  */
 class JcrGriffonAddon {
     void addonPostInit(GriffonApplication app) {
-        ConfigObject config = JcrConnector.instance.createConfig(app)
-        if (getConfigValueAsBoolean(app.config, 'griffon.jcr.connect.onstartup', true)) {
-            JcrConnector.instance.connect(app, config)
-        }
+        JcrConnector.instance.createConfig(app)
         def types = app.config.griffon?.jcr?.injectInto ?: ['controller']
-        for(String type : types) {
-            for(GriffonClass gc : app.artifactManager.getClassesOfType(type)) {
+        for (String type : types) {
+            for (GriffonClass gc : app.artifactManager.getClassesOfType(type)) {
                 if (JcrContributionHandler.isAssignableFrom(gc.clazz)) continue
                 JcrEnhancer.enhance(gc.metaClass)
             }
@@ -41,6 +38,12 @@ class JcrGriffonAddon {
     }
 
     Map events = [
+        LoadAddonsEnd: { app, addons ->
+            if (getConfigValueAsBoolean(app.config, 'griffon.jcr.connect.onstartup', true)) {
+                ConfigObject config = JcrConnector.instance.createConfig(app)
+                JcrConnector.instance.connect(app, config)
+            }
+        },
         ShutdownStart: { app ->
             ConfigObject config = JcrConnector.instance.createConfig(app)
             JcrConnector.instance.disconnect(app, config)
